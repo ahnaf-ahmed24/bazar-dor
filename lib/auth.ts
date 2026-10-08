@@ -2,16 +2,11 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import { MongoClient } from "mongodb";
 
-
-const uri = process.env.MONGODB_URI;
-
-if (!uri) {
-  throw new Error("MONGODB_URI টি .env.local অথবা Hosting (Vercel)-এ যুক্ত করা হয়নি!");
-}
-
+// ১. MONGODB_URI না থাকলে ফলব্যাক হিসেবে ডামি URI দিন (যাতে বিল্ড ফেল না করে)
+const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/placeholder";
 
 const client = new MongoClient(uri);
-const db = client.db("bazar_dor"); 
+const db = client.db("bazar_dor");
 
 export const auth = betterAuth({
     database: mongodbAdapter(db),
@@ -20,12 +15,12 @@ export const auth = betterAuth({
     },
     socialProviders: {
         google: { 
-            clientId: process.env.GOOGLE_CLIENT_ID || "", 
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "", 
+            clientId: process.env.GOOGLE_CLIENT_ID || "placeholder", 
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "placeholder", 
         },
         github: { 
-            clientId: process.env.GITHUB_CLIENT_ID || "", 
-            clientSecret: process.env.GITHUB_CLIENT_SECRET || "", 
+            clientId: process.env.GITHUB_CLIENT_ID || "placeholder", 
+            clientSecret: process.env.GITHUB_CLIENT_SECRET || "placeholder", 
         },
     },
     account: {
