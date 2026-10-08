@@ -1,36 +1,22 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛒 বাজার দর (BazarDor)
 
-## Getting Started
+বাজার দর হলো বাংলা সামাজিক নিত্যপ্রয়োজনীয় পণ্যের সঠিক দাম দেখার জন্য একটি রেসপন্সিভ ওয়েব অ্যাপ্লিকেশন।
 
-First, run the development server:
+## 🚀 টেকনোলজি (Technologies Used)
+- **Framework**: Next.js 14 (App Router)
+- **Styling**: Tailwind CSS
+- **Authentication**: BetterAuth (Email/Password, Google & GitHub)
+- **Toast Notifications**: React Hot Toast
+- **Deployment**: Vercel
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ ৫টি প্রধান ফিচার (Key Features)
+1. **লাইভ প্রাইস ট্র্যাকার & টিকার**: প্রতিদিনের বাংলা তারিখ ও প্রাইস স্ক্রলিং মার্কি।
+2. **ক্যাটাগরি ভিত্তিক পণ্য ও সর্টিং**: বাংলা সংখ্যা মেনে 'কম থেকে বেশি' এবং 'বেশি থেকে কম' ফিল্টারিং।
+3. **বাজারভিত্তিক মূল্য তুলনামূলক বিশ্লেষণ**: সর্বনিম্ন, সর্বাধিক ও গড় বাজার মূল্যের তথ্য।
+4. **সুরক্ষিত অথেন্টিকেশন সিস্টেম**: BetterAuth দ্বারা ইমেইল ও সোশ্যাল লগইন।
+5. **প্রোফাইল আপডেট ফিচার**: নিজ নাম ও তথ্য সহজে হালনাগাদ করার সুবিধা।
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🛠️ ডেভেলপমেন্ট প্রসেস & গিট কমিট নোট (Development Process)
+> **নোট:** এই প্রজেক্টটি নিখুঁতভাবে শেষ করার লক্ষ্যে মূল কাজ শুরু করার পূর্বে প্রথমে একটি **ডেমো প্রজেক্ট (Demo/Prototype)** তৈরি করা হয়। ডেমো প্রজেক্টে সব লজিক ও ফিচার পরীক্ষা-নিরীক্ষা করার পর, ফাইনাল প্রজেক্টে যেন কোনো ভুল বা বাগ (Bug) না থাকে সেভাবে কোডগুলো স্টেপ-বাই-স্টেপ ইন্টিগ্রেট করা হয়েছে। এই কারণে ফাইনাল প্রজেক্টের গিটহাব হিস্ট্রিতে দ্রুত সময়ের ব্যবধানে কমিটগুলো দেখা যাচ্ছে ।
