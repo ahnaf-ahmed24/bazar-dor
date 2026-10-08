@@ -26,6 +26,13 @@ export default function Navbar() {
   const currentCategory = searchParams.get('category') || '';
   const router = useRouter();
 
+ 
+  const currentDate = new Date().toLocaleDateString('bn-BD', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+  });
 
   const { data: session, isPending } = authClient.useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -34,13 +41,13 @@ export default function Navbar() {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          toast.success("সফলভাবে লগআউট হয়েছে!");
+          toast.success("সফলভাবে লগআউট হয়েছে!");
           setDropdownOpen(false);
           router.push("/signin");
           router.refresh();
         },
         onError: () => {
-          toast.error("লগআউট করতে সমস্যা হয়েছে!");
+          toast.error("লগআউট করতে সমস্যা হয়েছে!");
         }
       },
     });
@@ -63,7 +70,8 @@ export default function Navbar() {
             </div>
             <div>
               <span className="font-bold text-xl text-gray-900 tracking-tight">বাজার দর</span>
-              <p className="text-xs text-gray-500 font-medium">বৃহস্পতিবার, ৮ অক্টোবর, ২০২৬</p>
+             
+              <p className="text-xs text-gray-500 font-medium">{currentDate}</p>
             </div>
           </Link>
 

@@ -1,12 +1,22 @@
+'use client';
+
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function HeroBanner() {
+    
+    const currentDate = new Date().toLocaleDateString('bn-BD', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+
     return (
         <div className="bg-white p-6 md:p-8 rounded-2xl border shadow-sm flex flex-col md:flex-row justify-between items-center gap-6">
             <div className="space-y-3">
                 <span className="text-xs bg-emerald-50 text-emerald-700 font-semibold px-3 py-1 rounded-full border border-emerald-100">
-                    বৃহস্পতিবার, ৮ অক্টোবর, ২০২৬
+                    {currentDate}
                 </span>
                 <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
                     আজকের বাজারের দাম এক নজরে
