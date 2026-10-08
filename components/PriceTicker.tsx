@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 async function getTickerProducts() {
   try {
     const res = await fetch('https://api.abcz.workers.dev/api/bazardor/products', {
@@ -11,7 +13,6 @@ async function getTickerProducts() {
     if (data.products && Array.isArray(data.products)) return data.products;
     return [];
   } catch (error) {
-    console.error('Error fetching ticker products:', error);
     return [];
   }
 }
@@ -23,7 +24,6 @@ export default async function PriceTicker() {
     return null;
   }
 
-  
   const tickerItems = [...products, ...products];
 
   return (
@@ -35,7 +35,6 @@ export default async function PriceTicker() {
           const changeSymbol = isUp ? '▲' : isDown ? '▼' : '—';
           const changeText = `${changeSymbol} ${item.change?.pct || 0}%`;
 
-          
           const changeColor = isUp ? 'text-red-600' : isDown ? 'text-emerald-600' : 'text-gray-500';
 
           return (
