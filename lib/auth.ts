@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import clientPromise from "@/lib/db";
+import clientPromise from "@/lib/mongodb";
 
 // Global cached client থেকে database সংগৃহীত হচ্ছে
 const client = await clientPromise;
