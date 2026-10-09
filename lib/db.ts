@@ -1,24 +1,31 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.MONGODB_URI as string;
+const uri = process.env.MONGODB_URI;
 
-if (!uri) {
-  throw new Error("Please add your Mongo URI to environment variables");
-}
-
-let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-// Production ও Development উভয় পরিবেশেই MongoClient Caching নিশ্চিত করা
+if (!uri) {
+
+  if (process.env.NODE_ENV === "production") {
+    console.warn("MONGODB_URI is missing in production environment variables!");
+  }
+}
+
 const globalWithMongo = global as typeof globalThis & {
   _mongoClientPromise?: Promise<MongoClient>;
 };
 
-if (!globalWithMongo._mongoClientPromise) {
-  client = new MongoClient(uri);
-  globalWithMongo._mongoClientPromise = client.connect();
-}
+if (uri) {
+  if (!globalWithMongo._mongoClientPromise) {
+    const client = new MongoClient(uri);
+    globalWithMongo._mongoClientPromise = client.connect();
+  }
+  clientPromise = globalWithMongo._mongoClientPromise;
+} else {
 
-clientPromise = globalWithMongo._mongoClientPromise;
+  clientPromise = Promise.reject(
+    new Error("Please add your MONGODB_URI to environment variables")
+  );
+}
 
 export default clientPromise;
