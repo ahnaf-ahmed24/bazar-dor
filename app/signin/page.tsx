@@ -13,6 +13,9 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  // BetterAuth-এর refetch ফাংশন নিয়ে আসা
+  const { refetch } = authClient.useSession();
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
@@ -29,8 +32,11 @@ export default function SignInPage() {
       } else {
         toast.success("সফলভাবে লগইন হয়েছে!");
         
-        // Use full navigation to clear client cache and reflect session instantly across server/client components
-        window.location.href = "/";
+        // ১. ক্লায়েন্ট সেশন আপডেট করুন (কোনো পেজ রিফ্রেশ ছাড়া)
+        await refetch();
+        
+        // ২. হোম পেজে নিয়ে যান
+        router.push("/");
       }
     } catch (err: any) {
       toast.error(err?.message || "সার্ভারে সমস্যা হয়েছে, আবার চেষ্টা করুন!");
