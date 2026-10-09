@@ -1,5 +1,7 @@
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
+import { headers } from 'next/headers';
+import { auth } from '@/lib/auth'; // আপনার BetterAuth সার্ভার কনফিগ
 
 export const instant = false;
 
@@ -49,6 +51,16 @@ export default async function ProductDetailsPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
+  // ১. ইউজার সেশন চেক করুন (Server-side Auth)
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  // ২. ইউজার লগইন না থাকলে সরাসরি সাইন ইন পেজে রিডাইরেক্ট করা হবে
+  if (!session) {
+    redirect('/signin');
+  }
+
   const { slug } = await params;
   const product = await getProduct(slug);
 
@@ -79,7 +91,7 @@ export default async function ProductDetailsPage({
               <h1 className="text-2xl font-bold text-gray-900">{product.nameBn}</h1>
               <p className="text-sm text-gray-500">প্রতি {product.unit} · {product.categoryNameBn}</p>
               <p className="text-xs text-gray-600 font-medium">
-                গতকালকের তুলনায় আজ দাম {isUp ? 'বেড়েছে' : isDown ? 'কমেছে' : 'অপরিবর্তিত'} {diffAmount > 0 ? `${diffAmount} টাকা` : ''}
+                গতকালকের তুলনায় আজ দাম {isUp ? 'বেড়েছে' : isDown ? 'কমেছে' : 'অপরিবর্তিত'} {diffAmount > 0 ? `${diffAmount} টাকা` : ''}
               </p>
             </div>
           </div>

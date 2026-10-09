@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client"; // BetterAuth client
+import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import Link from "next/link";
@@ -13,33 +13,27 @@ export default function SignInPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  // BetterAuth-এর refetch ফাংশন নিয়ে আসা
-  const { refetch } = authClient.useSession();
-
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (loading) return;
     setLoading(true);
 
     try {
-      const res = await authClient.signIn.email({
-        email,
-        password,
-      });
-
-      if (res?.error) {
-        toast.error(res.error.message || "লগইন ব্যর্থ হয়েছে!");
-      } else {
-        toast.success("সফলভাবে লগইন হয়েছে!");
-        
-        // ১. ক্লায়েন্ট সেশন আপডেট করুন (কোনো পেজ রিফ্রেশ ছাড়া)
-        await refetch();
-        
-        // ২. হোম পেজে নিয়ে যান
-        router.push("/");
-      }
+      await authClient.signIn.email(
+        { email, password },
+        {
+          onSuccess: () => {
+            toast.success("সফলভাবে লগইন হয়েছে!");
+            router.push("/");
+            router.refresh(); // সার্ভার পেজগুলোকে নতুন কুকি দিয়ে ডাটা রি-ফেচ করতে বাধ্য করে
+          },
+          onError: (ctx) => {
+            toast.error(ctx.error.message || "লগইন ব্যর্থ হয়েছে!");
+          },
+        }
+      );
     } catch (err: any) {
-      toast.error(err?.message || "সার্ভারে সমস্যা হয়েছে, আবার চেষ্টা করুন!");
+      toast.error("সার্ভারে সমস্যা হয়েছে, আবার চেষ্টা করুন!");
     } finally {
       setLoading(false);
     }
