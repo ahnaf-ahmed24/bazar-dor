@@ -1,11 +1,9 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { MongoClient } from "mongodb";
+import clientPromise from "@/lib/db";
 
-// ১. MONGODB_URI না থাকলে ফলব্যাক হিসেবে ডামি URI দিন (যাতে বিল্ড ফেল না করে)
-const uri = process.env.MONGODB_URI || "mongodb://localhost:27017/placeholder";
-
-const client = new MongoClient(uri);
+// Global cached client থেকে database সংগৃহীত হচ্ছে
+const client = await clientPromise;
 const db = client.db("bazar_dor");
 
 export const auth = betterAuth({
