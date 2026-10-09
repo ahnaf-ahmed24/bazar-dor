@@ -8,7 +8,6 @@ import { useState } from 'react';
 import { authClient } from '@/lib/auth-client'; 
 import toast from 'react-hot-toast';
 
-
 const categories = [
   { name: 'সব', slug: '', icon: '🌟' },
   { name: 'চাল', slug: 'চাল', icon: '🍚' },
@@ -26,23 +25,23 @@ export default function Navbar() {
   const currentCategory = searchParams.get('category') || '';
   const router = useRouter();
 
- 
   const currentDate = new Date().toLocaleDateString('bn-BD', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 
-  const { data: session, isPending } = authClient.useSession();
+  const { data: session, isPending, refetch } = authClient.useSession();
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.success("সফলভাবে লগআউট হয়েছে!");
           setDropdownOpen(false);
+          await refetch();
           router.push("/signin");
           router.refresh();
         },
@@ -70,7 +69,6 @@ export default function Navbar() {
             </div>
             <div>
               <span className="font-bold text-xl text-gray-900 tracking-tight">বাজার দর</span>
-             
               <p className="text-xs text-gray-500 font-medium">{currentDate}</p>
             </div>
           </Link>
@@ -125,7 +123,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Second Row: Modern Category Pills with Icons */}
+        {/* Second Row: Category Pills */}
         <nav className="flex items-center justify-start md:justify-center gap-2 md:gap-3 overflow-x-auto py-1.5 scrollbar-none border-t border-gray-100/80 whitespace-nowrap mt-4 mb-4">
           {categories.map((cat) => {
             const isActive = currentCategory === cat.slug || (cat.name === 'সব' && !currentCategory);

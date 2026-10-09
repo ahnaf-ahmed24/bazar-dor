@@ -28,8 +28,9 @@ export default function SignInPage() {
         toast.error(res.error.message || "লগইন ব্যর্থ হয়েছে!");
       } else {
         toast.success("সফলভাবে লগইন হয়েছে!");
-        router.push("/");
-        router.refresh();
+        
+        // Use full navigation to clear client cache and reflect session instantly across server/client components
+        window.location.href = "/";
       }
     } catch (err: any) {
       toast.error(err?.message || "সার্ভারে সমস্যা হয়েছে, আবার চেষ্টা করুন!");
