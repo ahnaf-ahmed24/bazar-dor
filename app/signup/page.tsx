@@ -57,12 +57,13 @@ export default function SignUpPage() {
           নতুন অ্যাকাউন্ট তৈরি করুন বাজার দরের সাথে থাকতে।
         </p>
 
-        <form onSubmit={handleSignUp} className="space-y-4" autoComplet="off">
+        <form onSubmit={handleSignUp} className="space-y-4" autoComplete="off">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">নাম</label>
             <input 
               type="text" 
               required
+              autoComplete="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="আপনার নাম" 
@@ -74,6 +75,7 @@ export default function SignUpPage() {
             <input 
               type="email" 
               required
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com" 
@@ -85,6 +87,7 @@ export default function SignUpPage() {
             <input 
               type="password" 
               required
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="কমপক্ষে ৮ অক্ষর" 
@@ -95,7 +98,7 @@ export default function SignUpPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full py-2.5 bg-[#008236] text-white font-semibold rounded-lg hover:bg-[#006c2d] transition disabled:opacity-70 disabled:cursor-not-allowed"
+            className="w-full py-2.5 bg-[#008236] text-white font-semibold rounded-lg hover:bg-[#006c2d] transition disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
           >
             {loading ? "তৈরি হচ্ছে..." : "রেজিস্ট্রেশন করুন"}
           </button>
@@ -111,14 +114,14 @@ export default function SignUpPage() {
           <button 
             type="button"
             onClick={() => handleSocialLogin("google")}
-            className="w-full flex items-center justify-center gap-2 py-2 border rounded-lg hover:bg-gray-50 transition text-sm font-medium"
+            className="w-full flex items-center justify-center gap-2 py-2 border rounded-lg hover:bg-gray-50 transition text-sm font-medium cursor-pointer"
           >
             <FcGoogle size={20} /> Google দিয়ে চালিয়ে যান
           </button>
           <button 
             type="button"
             onClick={() => handleSocialLogin("github")}
-            className="w-full flex items-center justify-center gap-2 py-2 border rounded-lg hover:bg-gray-50 transition text-sm font-medium"
+            className="w-full flex items-center justify-center gap-2 py-2 border rounded-lg hover:bg-gray-50 transition text-sm font-medium cursor-pointer"
           >
             <FaGithub size={20} /> GitHub দিয়ে চালিয়ে যান
           </button>
