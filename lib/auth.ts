@@ -2,7 +2,6 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import clientPromise from "@/lib/db";
 
-
 const client = await clientPromise.catch((err) => {
   console.error("MongoDB connection failed in auth.ts:", err);
   return null;
@@ -12,10 +11,8 @@ const db = client ? client.db("bazar_dor") : null;
 
 export const auth = betterAuth({
   database: db ? mongodbAdapter(db) : undefined,
-  
 
   baseURL: process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL,
-  
 
   trustedOrigins: [
     "https://bazar-dor-khaki.vercel.app",
@@ -24,9 +21,14 @@ export const auth = betterAuth({
   ].filter(Boolean),
 
   advanced: {
-  
+    // সেশন কুকি যেন সিকিউর ও সঠিকভাবে সংরক্ষণ হয়
+    useSecureCookies: process.env.NODE_ENV === "production",
     crossSubDomainCookies: {
       enabled: true,
+    },
+    defaultCookieAttributes: {
+      sameSite: "none",
+      secure: true,
     },
   },
 
