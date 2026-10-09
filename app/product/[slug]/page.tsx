@@ -28,18 +28,27 @@ interface Product {
   markets: MarketItem[];
 }
 
-async function getProduct(slug: string): Promise<Product | null> {
+async function getProducts(): Promise<Product[]> {
   try {
-    const res = await fetch('https://api.abcz.workers.dev/api/bazardor/products', {
-      cache: 'no-store',
-    });
-    if (!res.ok) return null;
+    const res = await fetch('https://api.abcz.workers.dev/api/bazardor/products');
+    if (!res.ok) return [];
     const data = await res.json();
-    const products = Array.isArray(data) ? data : data.products || [];
-    return products.find((p: any) => p.slug === slug) || null;
+    return Array.isArray(data) ? data : data.products || [];
   } catch (error) {
-    return null;
+    return [];
   }
+}
+
+async function getProduct(slug: string): Promise<Product | null> {
+  const products = await getProducts();
+  return products.find((p) => p.slug === slug) || null;
+}
+
+export async function generateStaticParams() {
+  const products = await getProducts();
+  return products.map((product) => ({
+    slug: product.slug,
+  }));
 }
 
 export default async function ProductDetailsPage({
@@ -77,7 +86,7 @@ export default async function ProductDetailsPage({
               <h1 className="text-2xl font-bold text-gray-900">{product.nameBn}</h1>
               <p className="text-sm text-gray-500">প্রতি {product.unit} · {product.categoryNameBn}</p>
               <p className="text-xs text-gray-600 font-medium">
-                গতকালকের তুলনায় আজ দাম {isUp ? 'বেড়েছে' : isDown ? 'কমেছে' : 'অপরিবর্তিত'} {diffAmount > 0 ? `${diffAmount} টাকা` : ''}
+                গতকালকের তুলনায় আজ দাম {isUp ? 'বেড়েছে' : isDown ? 'কমেছে' : 'অপরিবর্তিত'} {diffAmount > 0 ? `${diffAmount} টাকা` : ''}
               </p>
             </div>
           </div>
