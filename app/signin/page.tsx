@@ -15,6 +15,7 @@ export default function SignInPage() {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     setLoading(true);
 
     try {
@@ -40,7 +41,7 @@ export default function SignInPage() {
   const handleSocialLogin = async (provider: "google" | "github") => {
     await authClient.signIn.social({
       provider,
-      callbackURL: "/"
+      callbackURL: "/",
     });
   };
 
@@ -48,7 +49,9 @@ export default function SignInPage() {
     <div className="min-h-screen bg-[#F4F6F0] flex flex-col justify-center items-center p-4">
       <div className="bg-white p-8 rounded-2xl shadow-sm w-full max-w-md border border-gray-100">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">সাইন ইন</h2>
-        <p className="text-center text-sm text-gray-500 mb-6">বিস্তারিত দাম, বাজার তুলনা ও প্রোফাইল দেখতে অ্যাকাউন্টে ঢুকুন।</p>
+        <p className="text-center text-sm text-gray-500 mb-6">
+          বিস্তারিত দাম, বাজার তুলনা ও প্রোফাইল দেখতে অ্যাকাউন্টে ঢুকুন।
+        </p>
 
         <form onSubmit={handleSignIn} className="space-y-4">
           <div>
@@ -56,6 +59,7 @@ export default function SignInPage() {
             <input 
               type="email" 
               required
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com" 
@@ -67,6 +71,7 @@ export default function SignInPage() {
             <input 
               type="password" 
               required
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="কমপক্ষে ৮ অক্ষর" 
@@ -77,7 +82,7 @@ export default function SignInPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full py-2.5 bg-[#008236] text-white font-semibold rounded-lg hover:bg-[#006c2d] transition disabled:opacity-50 cursor-pointer"
+            className="w-full py-2.5 bg-[#008236] text-white font-semibold rounded-lg hover:bg-[#006c2d] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {loading ? "লগইন হচ্ছে..." : "সাইন ইন"}
           </button>

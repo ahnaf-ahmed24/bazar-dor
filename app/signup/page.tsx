@@ -16,27 +16,36 @@ export default function SignUpPage() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
+    
     setLoading(true);
-    await authClient.signUp.email({
-      email,
-      password,
-      name,
-    }, {
-      onSuccess: () => {
-        toast.success("রেজিস্ট্রেশন সফল হয়েছে!");
-        router.push("/signin");
+    
+    await authClient.signUp.email(
+      {
+        email,
+        password,
+        name,
       },
-      onError: (ctx) => {
-        toast.error(ctx.error.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে!");
-        setLoading(false);
+      {
+        onSuccess: async () => {
+          toast.success("রেজিস্ট্রেশন সফল হয়েছে! দয়া করে লগইন করুন।");
+          // অটোমেটিক সাইন-ইন বন্ধ করতে সেশন সাইন-আউট করে /signin পেজে রিডাইরেক্ট
+          await authClient.signOut();
+          setLoading(false);
+          router.push("/signin");
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message || "রেজিস্ট্রেশন ব্যর্থ হয়েছে!");
+          setLoading(false);
+        },
       }
-    });
+    );
   };
 
   const handleSocialLogin = async (provider: "google" | "github") => {
     await authClient.signIn.social({
       provider,
-      callbackURL: "/"
+      callbackURL: "/",
     });
   };
 
@@ -44,9 +53,11 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-[#F4F6F0] flex flex-col justify-center items-center p-4">
       <div className="bg-white p-8 rounded-2xl shadow-sm w-full max-w-md border border-gray-100">
         <h2 className="text-2xl font-bold text-center text-gray-800 mb-2">রেজিস্ট্রেশন</h2>
-        <p className="text-center text-sm text-gray-500 mb-6">নতুন অ্যাকাউন্ট তৈরি করুন বাজার দরের সাথে থাকতে।</p>
+        <p className="text-center text-sm text-gray-500 mb-6">
+          নতুন অ্যাকাউন্ট তৈরি করুন বাজার দরের সাথে থাকতে।
+        </p>
 
-        <form onSubmit={handleSignUp} className="space-y-4">
+        <form onSubmit={handleSignUp} className="space-y-4" autoComplet="off">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">নাম</label>
             <input 
@@ -70,7 +81,7 @@ export default function SignUpPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">পাসওয়ার্ড</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">পাসওয়ার্ড</label>
             <input 
               type="password" 
               required
@@ -84,7 +95,7 @@ export default function SignUpPage() {
           <button 
             type="submit" 
             disabled={loading}
-            className="w-full py-2.5 bg-[#008236] text-white font-semibold rounded-lg hover:bg-[#006c2d] transition"
+            className="w-full py-2.5 bg-[#008236] text-white font-semibold rounded-lg hover:bg-[#006c2d] transition disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? "তৈরি হচ্ছে..." : "রেজিস্ট্রেশন করুন"}
           </button>
@@ -98,16 +109,18 @@ export default function SignUpPage() {
 
         <div className="space-y-2">
           <button 
+            type="button"
             onClick={() => handleSocialLogin("google")}
             className="w-full flex items-center justify-center gap-2 py-2 border rounded-lg hover:bg-gray-50 transition text-sm font-medium"
           >
-            <FcGoogle size={20} /> Google দিয়ে চালিয়ে যান
+            <FcGoogle size={20} /> Google দিয়ে চালিয়ে যান
           </button>
           <button 
+            type="button"
             onClick={() => handleSocialLogin("github")}
             className="w-full flex items-center justify-center gap-2 py-2 border rounded-lg hover:bg-gray-50 transition text-sm font-medium"
           >
-            <FaGithub size={20} /> GitHub দিয়ে চালিয়ে যান
+            <FaGithub size={20} /> GitHub দিয়ে চালিয়ে যান
           </button>
         </div>
 
