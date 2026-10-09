@@ -30,13 +30,14 @@ interface Product {
 
 async function getProduct(slug: string): Promise<Product | null> {
   try {
-    const res = await fetch('https://api.abcz.workers.dev/api/bazardor/products');
+    const res = await fetch('https://api.abcz.workers.dev/api/bazardor/products', {
+      cache: 'no-store',
+    });
     if (!res.ok) return null;
     const data = await res.json();
     const products = Array.isArray(data) ? data : data.products || [];
     return products.find((p: any) => p.slug === slug) || null;
   } catch (error) {
-    console.error('Failed to fetch product:', error);
     return null;
   }
 }
@@ -61,14 +62,12 @@ export default async function ProductDetailsPage({
   const allMaxs = product.markets?.map((m) => m.max) || [product.today];
   const overallMin = Math.min(...allMins);
   const overallMax = Math.max(...allMaxs);
-  
+
   const diffAmount = Math.abs(product.today - (product.yesterday || product.today));
 
   return (
     <div className="max-w-5xl mx-auto p-4 md:p-8 min-h-screen">
       <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 md:p-8 space-y-8">
-        
-
         <div className="bg-gray-50/50 p-6 rounded-2xl border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="flex items-center gap-4">
             <div className="text-4xl bg-white p-4 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-center w-20 h-20">
@@ -78,7 +77,7 @@ export default async function ProductDetailsPage({
               <h1 className="text-2xl font-bold text-gray-900">{product.nameBn}</h1>
               <p className="text-sm text-gray-500">প্রতি {product.unit} · {product.categoryNameBn}</p>
               <p className="text-xs text-gray-600 font-medium">
-                গতকালের তুলনায় আজ দাম {isUp ? 'বেড়েছে' : isDown ? 'কমেছে' : 'অপরিবর্তিত'} {diffAmount > 0 ? `${diffAmount} টাকা` : ''}
+                গতকালকের তুলনায় আজ দাম {isUp ? 'বেড়েছে' : isDown ? 'কমেছে' : 'অপরিবর্তিত'} {diffAmount > 0 ? `${diffAmount} টাকা` : ''}
               </p>
             </div>
           </div>
@@ -90,7 +89,6 @@ export default async function ProductDetailsPage({
             </span>
           </div>
         </div>
-
 
         <div className="space-y-4">
           <h2 className="text-lg font-bold text-gray-900">দামের সারসংক্ষেপ</h2>
@@ -112,7 +110,6 @@ export default async function ProductDetailsPage({
             </div>
           </div>
         </div>
-
 
         <div className="space-y-4">
           <h2 className="text-lg font-bold text-gray-900">বাজারভিত্তিক আজকের দাম</h2>
@@ -147,7 +144,6 @@ export default async function ProductDetailsPage({
             </div>
           </div>
         </div>
-
       </div>
     </div>
   );
