@@ -1,8 +1,17 @@
 import { createAuthClient } from "better-auth/react";
 
-export const authClient = createAuthClient({
-  baseURL:
+const getBaseUrl = () => {
+  if (typeof window !== "undefined") {
+    return window.location.origin;
+  }
+  return (
     process.env.NEXT_PUBLIC_BETTER_AUTH_URL ||
+    process.env.BETTER_AUTH_URL ||
     process.env.NEXT_PUBLIC_APP_URL ||
-    (typeof window !== "undefined" ? window.location.origin : "http://localhost:3000"),
+    "https://bazar-dor-khaki.vercel.app"
+  );
+};
+
+export const authClient = createAuthClient({
+  baseURL: getBaseUrl(),
 });
